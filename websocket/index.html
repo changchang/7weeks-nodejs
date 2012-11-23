@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Echo</title>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <h2>Echo</h2>
+    <ul>
+    </ul>
+    <p>
+      <input type="text" /> <button>Commit</button>
+    </p>
+
+    <script>
+      var socket = io.connect('http://localhost:3000');
+      socket.on('message', function (msg) {
+        insertText(msg);
+      });
+
+      var ul = document.querySelector('ul');
+      var input = document.querySelector('input');
+      var btn = document.querySelector('button');
+
+      var insertText = function(text) {
+        var li = document.createElement("li");
+        li.innerText = text;
+        ul.appendChild(li);
+      };
+
+      var clickAction = function() {
+        var text = input.value.trim();
+        if  (text) {
+          socket.emit('message', text);
+          input.value = '';
+        }
+      };
+
+      btn.addEventListener('click', clickAction, false);
+    </script>
+  </body>
+</html>
